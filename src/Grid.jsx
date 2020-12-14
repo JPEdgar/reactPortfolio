@@ -4,13 +4,13 @@ import { GridDetails, CellDetails, StartNode } from "./GridDetails";
 
 import "./Grid.css";
 
-const searchArray = [];
+// const searchArray = [];
 
 export default function Cell() {
   const [getGrid, setGrid] = React.useState(() => InitializeGrid());
 
   function TestFunction() {
-    setGrid([...getGrid, getGrid[0][0] = BuildCell(0, 0, "visitedNode")])
+    setGrid([...getGrid, (getGrid[0][0] = BuildCell(0, 0, "visitedNode"))]);
   }
 
   return (
@@ -25,9 +25,8 @@ function BuildCell(i, j, className, delay) {
   let tempClass = className;
 
   const HandleClick = (e) => {
-    console.log(e.target)
-    let temp = e.target
-    // e.target.style.animation-delay: 9s
+    console.log(e.target);
+    let temp = e.target;
     temp.className = temp.className + " visitedNode";
   };
 
@@ -49,9 +48,11 @@ function BuildCell(i, j, className, delay) {
 
   return (
     <div
+      key={`${i}, ${j}`}
       onClick={(e) => HandleClick(e)}
       className={`gridCell ${tempClass}`}
       style={{
+        animation: `clickCell ${delay}s`, // this is the key to getting each individual cell to animate separately
         left: `${cellDetails.moveX}px`,
         top: `${cellDetails.moveY}px`,
         width: gridDetails.cellSize,
@@ -69,7 +70,7 @@ function InitializeGrid() {
       gridArray[i].push(BuildCell(i, j, "unvisitedNode"));
     }
   }
-  console.log("gridArray = ")
-  console.log(gridArray)
+  console.log("gridArray = ");
+  console.log(gridArray);
   return gridArray;
 }
