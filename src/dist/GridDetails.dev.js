@@ -5,8 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.StartNode = exports.CellDetails = exports.GridDetails = void 0;
 var GridDetails = {
-  numRows: 4,
-  numCols: 3,
+  numRows: 5,
+  numCols: 4,
   cellSize: 40,
   margin: 50
 };
@@ -22,7 +22,7 @@ exports.CellDetails = CellDetails;
 var StartNode = {
   className: "startNode",
   xLoc: 1,
-  yLoc: 2,
+  yLoc: 3,
   moveX: 0,
   moveY: 0
 };
