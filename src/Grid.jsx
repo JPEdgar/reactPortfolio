@@ -8,10 +8,16 @@ const searchArray = [[StartNode.xLoc, StartNode.yLoc]];
 
 export default function Cell() {
   const [getGrid, setGrid] = useState(() => InitializeGrid());
-const [getCount, setCount] = useState(0)
+  const [getCount, setCount] = useState(0);
+  
   function TestFunction() {
-    setGrid([...getGrid, (getGrid[getCount][0] = BuildCell(0, 0, "visitedNode"))]); // this works.  build setState off of this.
-    setCount(getCount + 1)
+    // this is adding a value to the grid.  Need to fix/adjust.
+    const tempGrid = [...getGrid]
+    setGrid([
+      ...tempGrid,
+      (tempGrid[getCount][0] = BuildCell(getCount, 0, "visitedNode")),
+    ]); // this works.  build setState off of this.
+    setCount((prevCount) => prevCount + 1);
     console.log(getGrid);
   }
 
@@ -58,8 +64,8 @@ const [getCount, setCount] = useState(0)
 function GetNeightbors(startSpot, direction) {
   let tempGrid = []; // needs to set the getGrid to this array and modify/return this array.
   //   const returnGrid = [...getGrid];
-  const numRows = GridDetails.numRows; // why do I need the grid again?  This info is in GridDetails.js
-  const numCols = GridDetails.numCols; // why do I need the grid again?  This info is in GridDetails.js
+  const numRows = GridDetails.numRows;
+  const numCols = GridDetails.numCols;
   const focalSpot = startSpot;
   const startNode = [StartNode.xLoc, StartNode.yLoc];
   let searchSpot = [];
