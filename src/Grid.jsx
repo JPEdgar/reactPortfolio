@@ -9,23 +9,34 @@ const searchArray = [[StartNode.xLoc, StartNode.yLoc]];
 export default function Cell() {
   const [getGrid, setGrid] = useState(() => InitializeGrid());
   const [getCount, setCount] = useState(0);
-  
+
   function TestFunction() {
-    // this is adding a value to the grid.  Need to fix/adjust.
-    const tempGrid = [...getGrid]
-    setGrid([
-      ...tempGrid,
-      (tempGrid[getCount][0] = BuildCell(getCount, 0, "visitedNode")),
-    ]); // this works.  build setState off of this.
+    // this is adding a value to the grid.  Need to fix/adjust.  Bug is not in tempGrid but setGrid
+    const tempGrid = [...getGrid];
+    const buildCell = BuildCell(0, getCount, "visitedNode");
+    for (let i = 0; i < 4; i++) {
+      getGrid[i][getCount] = buildCell;
+    }
+    // tempGrid[getCount].splice(0, 1, buildCell);
+    // tempGrid[getCount][0] = buildCell
+    console.log(tempGrid);
+    // getGrid.pop();
+    // setGrid([...getGrid], [...tempGrid]);
+    // setGrid([...getGrid, (tempGrid[getCount][0] = buildCell)]); // this works.  build setState off of this.
+    setGrid(getGrid, getGrid); // this works.  build setState off of this.  Bug is not tempGrid but setGrid
+    // would this work better as a single dim array or an object?  is it because [...] and [...] means concat vs replace?
+
     setCount((prevCount) => prevCount + 1);
-    console.log(getGrid);
+    // console.log(getGrid);
   }
 
   function TempSearch() {
+    //console.log(getGrid);
+
     if (searchArray.length <= 0) {
       return;
     }
-    let tempArray = [];
+    const tempGrid = [...getGrid];
     let focusSpot;
     const searchSpot = searchArray.shift();
     if (GetNeightbors(searchSpot, "up")) {
@@ -34,12 +45,13 @@ export default function Cell() {
       console.log(focusSpot);
       setGrid([
         ...getGrid,
-        (getGrid[focusSpot[0]][focusSpot[1]] = BuildCell(
+        (tempGrid[focusSpot[0]][focusSpot[1]] = BuildCell(
           focusSpot[0],
           focusSpot[1],
           "visitedNode"
         )),
       ]);
+      // getGrid.pop()
     }
     if (GetNeightbors(searchSpot, "right ")) {
       // right - (+1, 0)
@@ -51,11 +63,15 @@ export default function Cell() {
     //  tempArray = ;
   }
 
+  function LogGrid() {
+    console.log(getGrid);
+  }
   return (
     <>
       {getGrid}
       <button onClick={() => TestFunction()}>Test</button>
       <button onClick={() => TempSearch()}>Get Neighbors</button>
+      <button onClick={() => LogGrid()}>Log Grid</button>
       <p>{getCount}</p>
     </>
   );
@@ -171,7 +187,7 @@ function InitializeGrid() {
   return gridArray;
 }
 
-function BuildCell(i, j, className, delay) {
+function BuildCell(i, j, className) {
   let tempClass = className;
 
   const HandleClick = (e) => {
