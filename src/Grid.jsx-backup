@@ -1,4 +1,7 @@
-import React, { useState, useReducer, useCallback } from "react";
+// 12/21/2020
+// pre-convert state to obj
+
+import React, { useState } from "react";
 
 import { GridDetails, CellDetails, StartNode } from "./GridDetails";
 
@@ -6,43 +9,28 @@ import "./Grid.css";
 
 const searchArray = [[StartNode.xLoc, StartNode.yLoc]];
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "BUILD_CELL":
-      console.log("in reducer - BUILD_CELL");
-      console.log(action);
-      const tempState = [...state];
-      const buildCell = BuildCell(0, action.payload, "visitedNode");
-      tempState[0].splice(action.payload, 1, buildCell);
-      // tempState[action.payload][0] = BuildCell(0, action.payload, "visitedNode")
-      return [...tempState, tempState];
-
-    // return state;
-    default:
-      return state;
-  }
-}
-
 export default function Cell() {
-  // const [getGrid, setGrid] = useReducer(reducer, InitializeGrid());
   const [getGrid, setGrid] = useState(() => InitializeGrid());
   const [getCount, setCount] = useState(0);
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
   function TestFunction() {
-    //   // this is adding a value to the grid.  Need to fix/adjust.  Bug is not in tempGrid but setGrid
-    const tempState = [...getGrid];
+    // this is adding a value to the grid.  Need to fix/adjust.  Bug is not in tempGrid but setGrid
+    const tempGrid = [...getGrid];
     const buildCell = BuildCell(0, getCount, "visitedNode");
-    tempState[getCount][0] = buildCell;
-    // setGrid({ type: "BUILD_CELL", payload: getCount });
+    for (let i = 0; i < 4; i++) {
+      getGrid[i][getCount] = buildCell;
+    }
+    // tempGrid[getCount].splice(0, 1, buildCell);
+    // tempGrid[getCount][0] = buildCell
+    console.log(tempGrid);
+    // getGrid.pop();
+    // setGrid([...getGrid], [...tempGrid]);
+    // setGrid([...getGrid, (tempGrid[getCount][0] = buildCell)]); // this works.  build setState off of this.
+    setGrid([getGrid, { getGrid }]); // this works.  build setState off of this.  Bug is not tempGrid but setGrid
+    // would this work better as a single dim array or an object?  is it because [...] and [...] means concat vs replace?
+
     setCount((prevCount) => prevCount + 1);
-    setGrid([...tempState]);
-
-    // testGrid();
-  }
-
-  function ForceUpdate() {
-    forceUpdate();
+    // console.log(getGrid);
   }
 
   function TempSearch() {
@@ -51,7 +39,7 @@ export default function Cell() {
     if (searchArray.length <= 0) {
       return;
     }
-    const tempGrid = [...getGrid, tempGrid];
+    const tempGrid = [...getGrid];
     let focusSpot;
     const searchSpot = searchArray.shift();
     if (GetNeightbors(searchSpot, "up")) {
@@ -87,7 +75,6 @@ export default function Cell() {
       <button onClick={() => TestFunction()}>Test</button>
       <button onClick={() => TempSearch()}>Get Neighbors</button>
       <button onClick={() => LogGrid()}>Log Grid</button>
-      <button onClick={() => ForceUpdate()}>Update Grid</button>
       <p>{getCount}</p>
     </>
   );
@@ -198,7 +185,6 @@ function InitializeGrid() {
     gridArray.push([]);
     for (let j = 0; j < GridDetails.numRows; j++) {
       gridArray[i].push(BuildCell(i, j, "unvisitedNode"));
-      // gridArray[i].push({}));
     }
   }
   return gridArray;
@@ -220,7 +206,7 @@ function BuildCell(i, j, className) {
   if (i === StartNode.xLoc && j === StartNode.yLoc) {
     cellDetails = { ...StartNode };
     tempClass = cellDetails.className;
-    // console.log(cellDetails);
+    console.log(cellDetails);
   } else {
     cellDetails = { ...CellDetails };
     cellDetails.xLoc = i;
