@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useCallback } from "react";
+import React, { useState, useReducer, useCallback, useEffect } from "react";
 
 import { GridDetails, CellDetails, StartNode } from "./GridDetails";
 
@@ -33,11 +33,12 @@ export default function Cell() {
     //   // this is adding a value to the grid.  Need to fix/adjust.  Bug is not in tempGrid but setGrid
     const tempState = [...getGrid];
     const buildCell = BuildCell(0, getCount, "visitedNode");
-    tempState[getCount][0] = buildCell;
+    getGrid[getCount][0] = buildCell;
     // setGrid({ type: "BUILD_CELL", payload: getCount });
     setCount((prevCount) => prevCount + 1);
-    setGrid([...tempState]);
 
+    setGrid([...tempState, tempState]);
+    tempState.pop();
     // testGrid();
   }
 
