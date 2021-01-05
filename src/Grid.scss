@@ -1,6 +1,7 @@
 $unvisitedNode: lightgray;
 $visitedNode: blue;
 $startNode: yellow;
+$endNode: red;
 
 .tempCellText {
   padding-right: 3px;
@@ -22,6 +23,10 @@ $startNode: yellow;
 
 .startNode {
   background-color: $startNode;
+}
+
+.endNode {
+  background-color: $endNode;
 }
 
 @keyframes clickCell {

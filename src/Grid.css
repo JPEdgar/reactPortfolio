@@ -20,6 +20,10 @@
   background-color: yellow;
 }
 
+.endNode {
+  background-color: red;
+}
+
 @keyframes clickCell {
   from {
     background-color: lightgray;

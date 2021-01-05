@@ -1,6 +1,6 @@
 export const GridDetails = {
-  numRows: 5,
-  numCols: 4,
+  numRows: 6,
+  numCols: 5,
   cellSize: 40,
   margin: 50,
 };
@@ -15,8 +15,16 @@ export const CellDetails = {
 
 export const StartNode = {
   className: "startNode",
+  xLoc: 3,
+  yLoc: 4,
+  moveX: 0,
+  moveY: 0,
+};
+
+export const EndNode = {
+  className: "endNode",
   xLoc: 1,
-  yLoc: 3,
+  yLoc: 1,
   moveX: 0,
   moveY: 0,
 };
