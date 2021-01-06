@@ -44,8 +44,10 @@ export default function Grid() {
     });
 
     // these two are states and local to Grid()
+    // since setState() is async, need to get the state properly updated.
+    // currently, state is overriding itself.  (3, 3) is "unvisited" because of this.
     setCount((count) => count + 1);
-    setGrid(anotherTemp);
+    setGrid((currGrid) => (currGrid = [...anotherTemp]));
   }
 
   function LogArray() {
@@ -69,26 +71,33 @@ export default function Grid() {
     }
 
     searchSpot = searchArray.shift();
-    
+
     tempInfo = SearchNeighbors(searchSpot, "up", getGrid);
     if (tempInfo.rebuildCell) {
       RebuildCell(tempInfo.iLoc);
     }
+    console.log("~ ~ ~ ~ ~ ~");
+    console.log("up");
+    console.log(tempInfo);
 
     tempInfo = SearchNeighbors(searchSpot, "right", getGrid);
     if (tempInfo.rebuildCell) {
       RebuildCell(tempInfo.iLoc);
     }
-
+    console.log("right");
+    console.log(tempInfo);
     tempInfo = SearchNeighbors(searchSpot, "down", getGrid);
     if (tempInfo.rebuildCell) {
       RebuildCell(tempInfo.iLoc);
     }
-
+    console.log("down");
+    console.log(tempInfo);
     tempInfo = SearchNeighbors(searchSpot, "left", getGrid);
     if (tempInfo.rebuildCell) {
       RebuildCell(tempInfo.iLoc);
     }
+    console.log("left");
+    console.log(tempInfo);
   }
 
   return (
@@ -154,8 +163,15 @@ function SearchNeighbors(searchSpot, dir, grid) {
       return cell;
     }
   });
-
+  /*
+    console.log(`looking ${dir}`)
+  console.log("focus = ")
+  console.log(focusSpot)
+  console.log("tempCell = ");
   console.log(tempCell[0])
+  console.log("- - - - - - - -")
+
+            */
   // checks to see if focus has been visited
   if (tempCell[0].props.className.includes(" visitedNode")) {
     return { rebuildCell: false };
