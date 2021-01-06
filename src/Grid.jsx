@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { GridDetails, CellDetails, StartNode, EndNode } from "./GridDetails";
 
@@ -8,19 +8,23 @@ let searchArray = [[StartNode.xLoc, StartNode.yLoc]];
 
 export default function Grid() {
   const [getGrid, setGrid] = useState(() => InitializeGrid());
-  const [getCount, setCount] = useState(0);
-  console.log("grid rendered");
 
-  function RebuildCell(tempI) {
-    let i = tempI;
-    let j = 0;
+  // render count section
+  const renderCount = React.useRef(1);
+  useEffect(() => {
+    renderCount.current = renderCount.current + 1;
+  });
 
-    // local state in Grid()
-    let tempArr = [...getGrid];
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function DestroyCell(tempI, currGrid) {
+    let tempGrid = [];
+    if (currGrid.length === 0) {
+      tempGrid = [...getGrid];
+    } else {
+      tempGrid = [...currGrid];
+    }
     const locArr = [];
-
-    // creates an array with the modified row filtered out
-    const anotherTemp = tempArr.filter((tempItem) => {
+    const testThing = tempGrid.filter((tempItem) => {
       let moreTemp = tempItem.props.id;
       if (moreTemp === tempI) {
         locArr[0] = parseInt(tempItem.props.children);
@@ -31,40 +35,32 @@ export default function Grid() {
       return moreTemp !== tempI;
     });
 
+    return testThing;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function RebuildCell(tempI) {
+    let i = tempI;
+    let j = 0;
+
     // creates the keys for rows/cols
     while (i >= GridDetails.numRows) {
       i -= GridDetails.numRows;
       j++;
     }
-    // console.log(`i=${i}, j=${j}`);
-
-    anotherTemp.push(BuildCell(j, i, "visitedNode", tempI));
-    anotherTemp.sort((a, b) => {
-      return a.props.id - b.props.id;
-    });
-
-    // these two are states and local to Grid()
-    // since setState() is async, need to get the state properly updated.
-    // currently, state is overriding itself.  (3, 3) is "unvisited" because of this.
-    setCount((count) => count + 1);
-    setGrid((currGrid) => (currGrid = [...anotherTemp]));
+    return BuildCell(j, i, "visitedNode", tempI);
   }
 
-  function LogArray() {
-    console.log(searchArray);
-  }
-
-  function PrintGrid() {
-    console.log(" - - - ");
-    console.log(getGrid);
-  }
-
-  function FindNeighbor() {
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function FindNeighbors() {
     let searchSpot;
     let tempInfo = {
       rebuildCell: false,
       iLoc: 0,
     };
+
+    let damagedGrid = [];
+    let repairedGrid = [];
 
     if (searchArray.length <= 0) {
       return;
@@ -74,38 +70,60 @@ export default function Grid() {
 
     tempInfo = SearchNeighbors(searchSpot, "up", getGrid);
     if (tempInfo.rebuildCell) {
-      RebuildCell(tempInfo.iLoc);
+      damagedGrid = DestroyCell(tempInfo.iLoc, damagedGrid);
+      damagedGrid.push(RebuildCell(tempInfo.iLoc));
     }
-    console.log("~ ~ ~ ~ ~ ~");
-    console.log("up");
-    console.log(tempInfo);
-
+    console.log(damagedGrid);
     tempInfo = SearchNeighbors(searchSpot, "right", getGrid);
     if (tempInfo.rebuildCell) {
-      RebuildCell(tempInfo.iLoc);
+      damagedGrid = DestroyCell(tempInfo.iLoc, damagedGrid);
+      damagedGrid.push(RebuildCell(tempInfo.iLoc));
     }
-    console.log("right");
-    console.log(tempInfo);
+    console.log(damagedGrid);
     tempInfo = SearchNeighbors(searchSpot, "down", getGrid);
     if (tempInfo.rebuildCell) {
-      RebuildCell(tempInfo.iLoc);
+      damagedGrid = DestroyCell(tempInfo.iLoc, damagedGrid);
+      damagedGrid.push(RebuildCell(tempInfo.iLoc));
     }
-    console.log("down");
-    console.log(tempInfo);
+    console.log(damagedGrid);
     tempInfo = SearchNeighbors(searchSpot, "left", getGrid);
     if (tempInfo.rebuildCell) {
-      RebuildCell(tempInfo.iLoc);
+      damagedGrid = DestroyCell(tempInfo.iLoc, damagedGrid);
+      damagedGrid.push(RebuildCell(tempInfo.iLoc));
     }
-    console.log("left");
-    console.log(tempInfo);
+
+    repairedGrid = SortGrid(damagedGrid);
+    console.log(repairedGrid);
+    setGrid(() => repairedGrid);
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function SortGrid(currGrid) {
+    const tempGrid = [...currGrid];
+    tempGrid.sort((a, b) => {
+      return a.props.id - b.props.id;
+    });
+    return tempGrid;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function LogArray() {
+    console.log(searchArray);
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function PrintGrid() {
+    console.log(" - - - ");
+    console.log(getGrid);
   }
 
   return (
     <>
+      <div>Render Count: {renderCount.current}</div>
       {getGrid}
-      <button onClick={() => RebuildCell(getCount)}>Test</button>
+      {/* <button onClick={() => RebuildCell(getCount)}>Test</button> */}
       <button onClick={() => PrintGrid()}>Print Grid</button>
-      <button onClick={() => FindNeighbor()}>Find Neighbor</button>
+      <button onClick={() => FindNeighbors()}>Find Neighbor</button>
       <button onClick={() => LogArray()}>Log Array</button>
     </>
   );
@@ -163,15 +181,7 @@ function SearchNeighbors(searchSpot, dir, grid) {
       return cell;
     }
   });
-  /*
-    console.log(`looking ${dir}`)
-  console.log("focus = ")
-  console.log(focusSpot)
-  console.log("tempCell = ");
-  console.log(tempCell[0])
-  console.log("- - - - - - - -")
 
-            */
   // checks to see if focus has been visited
   if (tempCell[0].props.className.includes(" visitedNode")) {
     return { rebuildCell: false };

@@ -8,7 +8,7 @@ var GridDetails = {
   numRows: 6,
   numCols: 5,
   cellSize: 40,
-  margin: 50
+  margin: 75
 };
 exports.GridDetails = GridDetails;
 var CellDetails = {
