@@ -1,3 +1,9 @@
+// useState isn't updating.  Maybe refactor to make grid into an object instead of an arra.
+/*
+function incrementCount(state, props) {
+  return {...state, count: state.count + 1};
+}
+*/
 import React, { useEffect, useState } from "react";
 
 import { GridDetails, CellDetails, StartNode, EndNode } from "./GridDetails";
@@ -53,48 +59,49 @@ export default function Grid() {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   function FindNeighbors() {
-    let searchSpot;
-    let tempInfo = {
-      rebuildCell: false,
-      iLoc: 0,
-    };
-
-    let damagedGrid = [];
     let repairedGrid = [];
+    let i = 0;
+    do {
+      let damagedGrid = [...getGrid];
+      let searchSpot;
+      let tempInfo = {
+        rebuildCell: false,
+        iLoc: 0,
+      };
 
-    if (searchArray.length <= 0) {
-      return;
-    }
+      if (searchArray.length <= 0) {
+        console.log("searchArray empty");
+        return;
+      }
 
-    searchSpot = searchArray.shift();
+      searchSpot = searchArray.shift();
 
-    tempInfo = SearchNeighbors(searchSpot, "up", getGrid);
-    if (tempInfo.rebuildCell) {
-      damagedGrid = DestroyCell(tempInfo.iLoc, damagedGrid);
-      damagedGrid.push(RebuildCell(tempInfo.iLoc));
-    }
-    console.log(damagedGrid);
-    tempInfo = SearchNeighbors(searchSpot, "right", getGrid);
-    if (tempInfo.rebuildCell) {
-      damagedGrid = DestroyCell(tempInfo.iLoc, damagedGrid);
-      damagedGrid.push(RebuildCell(tempInfo.iLoc));
-    }
-    console.log(damagedGrid);
-    tempInfo = SearchNeighbors(searchSpot, "down", getGrid);
-    if (tempInfo.rebuildCell) {
-      damagedGrid = DestroyCell(tempInfo.iLoc, damagedGrid);
-      damagedGrid.push(RebuildCell(tempInfo.iLoc));
-    }
-    console.log(damagedGrid);
-    tempInfo = SearchNeighbors(searchSpot, "left", getGrid);
-    if (tempInfo.rebuildCell) {
-      damagedGrid = DestroyCell(tempInfo.iLoc, damagedGrid);
-      damagedGrid.push(RebuildCell(tempInfo.iLoc));
-    }
+      tempInfo = SearchNeighbors(searchSpot, "up", getGrid);
+      if (tempInfo.rebuildCell) {
+        damagedGrid = DestroyCell(tempInfo.iLoc, damagedGrid);
+        damagedGrid.push(RebuildCell(tempInfo.iLoc));
+      }
+      tempInfo = SearchNeighbors(searchSpot, "right", getGrid);
+      if (tempInfo.rebuildCell) {
+        damagedGrid = DestroyCell(tempInfo.iLoc, damagedGrid);
+        damagedGrid.push(RebuildCell(tempInfo.iLoc));
+      }
+      tempInfo = SearchNeighbors(searchSpot, "down", getGrid);
+      if (tempInfo.rebuildCell) {
+        damagedGrid = DestroyCell(tempInfo.iLoc, damagedGrid);
+        damagedGrid.push(RebuildCell(tempInfo.iLoc));
+      }
+      tempInfo = SearchNeighbors(searchSpot, "left", getGrid);
+      if (tempInfo.rebuildCell) {
+        damagedGrid = DestroyCell(tempInfo.iLoc, damagedGrid);
+        damagedGrid.push(RebuildCell(tempInfo.iLoc));
+      }
 
-    repairedGrid = SortGrid(damagedGrid);
-    console.log(repairedGrid);
-    setGrid(() => repairedGrid);
+      repairedGrid = SortGrid(damagedGrid);
+      setGrid(repairedGrid);
+
+      i++;
+    } while (i < 7);
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
