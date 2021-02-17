@@ -1,18 +1,9 @@
-.tempCellText {
-  padding-right: 3px;
-  color: red;
-}
-
-.gridCell {
-  background-color: lightgray;
+.grid {
   position: absolute;
-  outline: 0.1px solid;
-  text-align: right;
-  vertical-align: top;
+  background-color: lightgray;
 }
 
 .visitedNode {
-  animation: clickCell 2s;
   background-color: blue;
 }
 
@@ -22,13 +13,4 @@
 
 .endNode {
   background-color: red;
-}
-
-@keyframes clickCell {
-  from {
-    background-color: lightgray;
-  }
-  to {
-    background-color: blue;
-  }
 }

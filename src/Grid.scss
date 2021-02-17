@@ -1,23 +1,14 @@
-$unvisitedNode: lightgray;
+$gridBG: lightgray;
 $visitedNode: blue;
 $startNode: yellow;
 $endNode: red;
 
-.tempCellText {
-  padding-right: 3px;
-  color: red;
-}
-
-.gridCell {
-  background-color: $unvisitedNode;
+.grid {
   position: absolute;
-  outline: 0.1px solid;
-  text-align: right;
-  vertical-align: top;
+  background-color: $gridBG;
 }
 
 .visitedNode {
-  animation: clickCell 2s;
   background-color: $visitedNode;
 }
 
@@ -27,13 +18,4 @@ $endNode: red;
 
 .endNode {
   background-color: $endNode;
-}
-
-@keyframes clickCell {
-  from {
-    background-color: $unvisitedNode;
-  }
-  to {
-    background-color: $visitedNode;
-  }
 }
