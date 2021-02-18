@@ -9,7 +9,10 @@ $endNode: red;
 }
 
 .visitedNode {
+  animation-name: animation-VisitedNode;
+  // animation-duration: 2s;
   background-color: $visitedNode;
+  color: white;
 }
 
 .startNode {
@@ -18,4 +21,13 @@ $endNode: red;
 
 .endNode {
   background-color: $endNode;
+}
+
+@keyframes animation-VisitedNode {
+  from {
+    background-color: $gridBG;
+  }
+  to {
+    background-color: $visitedNode;
+  }
 }

@@ -1,7 +1,7 @@
 export const GridDetails = {
-  numRows: 5,
-  numCols: 6,
-  cellSize: 35,
+  numRows: 25,
+  numCols: 20,
+  cellSize: 25,
   gridMargin: 100,
 };
 
@@ -11,6 +11,6 @@ export const StartNode = {
 };
 
 export const EndNode = {
-  xPos: 3,
-  yPos: 4,
+  xPos: 15,
+  yPos: 20,
 };

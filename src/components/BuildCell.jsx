@@ -13,18 +13,18 @@ function BuildCell(row, col) {
   }
 
   function handleClick(e) {
-    let analyzedNode = AnalyzeNode([row, col]);
-    if (analyzedNode === "start") {
-      // is start node
-    } else if (analyzedNode === "end") {
-      // is end node
-    } else if (analyzedNode === "visited") {
-      // ;turn to visited node
-      additionalClass = " visitedNode";
-      e.target.className = `grid${additionalClass}`;
-    } else {
-      // do nothing
-    }
+    // AnalyzeNode([row, col]);
+    // if (analyzedNode === "start") {
+    //   // is start node
+    // } else if (analyzedNode === "end") {
+    //   // is end node
+    // } else if (analyzedNode === "visited") {
+    //   // ;turn to visited node
+    //   additionalClass = " visitedNode";
+    //   e.target.className = `grid${additionalClass}`;
+    // } else {
+    //   // do nothing 
+    // }
   }
 
   return (
@@ -41,7 +41,7 @@ function BuildCell(row, col) {
         border: "1px solid black",
       }}
     >
-      {row}, {col}
+      {/* {row}, {col} */}
     </div>
   );
 }

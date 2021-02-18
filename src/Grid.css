@@ -4,7 +4,9 @@
 }
 
 .visitedNode {
+  animation-name: animation-VisitedNode;
   background-color: blue;
+  color: white;
 }
 
 .startNode {
@@ -13,4 +15,13 @@
 
 .endNode {
   background-color: red;
+}
+
+@keyframes animation-VisitedNode {
+  from {
+    background-color: lightgray;
+  }
+  to {
+    background-color: blue;
+  }
 }
