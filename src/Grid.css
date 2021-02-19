@@ -5,8 +5,8 @@
 
 .visitedNode {
   animation-name: animation-VisitedNode;
-  background-color: blue;
-  color: white;
+  animation-duration: 2s;
+  background-color: cyan;
 }
 
 .startNode {
@@ -17,11 +17,25 @@
   background-color: red;
 }
 
+.path {
+  background-color: darkblue;
+  animation-name: animation-Path;
+  animation-duration: 2s;
+}
+
+@keyframes animation-Path {
+  from {
+    background-color: cyan;
+  }
+  to {
+    background-color: darkblue;
+  }
+}
 @keyframes animation-VisitedNode {
   from {
     background-color: lightgray;
   }
   to {
-    background-color: blue;
+    background-color: cyan;
   }
 }

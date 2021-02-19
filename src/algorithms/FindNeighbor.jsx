@@ -1,8 +1,20 @@
 import { GridDetails } from "../components/GridDetails";
 import AnalyzeNode from "./AnalyzeNode";
 
-function FindNeighbor(currentPos, iteration) {
+export default function FindNeighbor(currentPos) {
   // console.log(`searching ${currentPos}`);
+  // const currObj = document.getElementById(`${currentPos[0]}, ${currentPos[1]}`);
+  // const cellData = {
+  //   xPos: currObj.getAttribute("x-pos"),
+  //   yPos: currObj.getAttribute("y-pos"),
+  //   wasVisited: currObj.getAttribute("was-visited"),
+  //   nodeDistance: currObj.getAttribute("node-distance"),
+  //   nodeParent: currObj.getAttribute("node-parent"),
+  // };
+
+  // console.log("currentObj data = ");
+  // console.log(cellData);
+
   const xLoc = currentPos[0];
   const yLoc = currentPos[1];
   const neighbors = [];
@@ -20,10 +32,31 @@ function FindNeighbor(currentPos, iteration) {
 
   function NodeTest(searchSpot) {
     if (CheckNode(searchSpot) && doSearch) {
-      nodeType = AnalyzeNode(searchSpot, iteration);
+      nodeType = AnalyzeNode(searchSpot);
       if (nodeType === "unvisited") {
+        const targetObj = document.getElementById(`${searchSpot[0]}, ${searchSpot[1]}`);
+        const currObj = document.getElementById(`${currentPos[0]}, ${currentPos[1]}`);
+        const tempDistance = parseInt(currObj.getAttribute("node-distance"));
+        if (tempDistance < 0) {
+          targetObj.setAttribute("node-distance", 1);
+        } else {
+          targetObj.setAttribute("node-distance", tempDistance + 1);
+        }
+        targetObj.setAttribute("was-visited", "true");
+        targetObj.setAttribute("node-parent", `${currentPos[0]}, ${currentPos[1]}`);
+
         neighbors.push(searchSpot);
       } else if (nodeType === "end") {
+        const targetObj = document.getElementById(`${searchSpot[0]}, ${searchSpot[1]}`);
+        const currObj = document.getElementById(`${currentPos[0]}, ${currentPos[1]}`);
+        const tempDistance = parseInt(currObj.getAttribute("node-distance"));
+        if (tempDistance < 0) {
+          targetObj.setAttribute("node-distance", 1);
+        } else {
+          targetObj.setAttribute("node-distance", tempDistance + 1);
+        }
+        targetObj.setAttribute("was-visited", "true");
+        targetObj.setAttribute("node-parent", `${currentPos[0]}, ${currentPos[1]}`);
         doSearch = false;
       } else if (nodeType === "start") {
         //
@@ -34,8 +67,6 @@ function FindNeighbor(currentPos, iteration) {
   }
   return { array: neighbors, search: doSearch };
 }
-
-export default FindNeighbor;
 
 // checks to see if node is in grid borders
 function CheckNode(pos) {

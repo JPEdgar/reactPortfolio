@@ -5,9 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.EndNode = exports.StartNode = exports.GridDetails = void 0;
 var GridDetails = {
-  numRows: 25,
-  numCols: 20,
-  cellSize: 25,
+  numRows: 45,
+  numCols: 35,
+  cellSize: 15,
   gridMargin: 100
 };
 exports.GridDetails = GridDetails;
@@ -17,7 +17,7 @@ var StartNode = {
 };
 exports.StartNode = StartNode;
 var EndNode = {
-  xPos: 15,
-  yPos: 20
+  xPos: 30,
+  yPos: 40
 };
 exports.EndNode = EndNode;

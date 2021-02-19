@@ -1,7 +1,8 @@
 $gridBG: lightgray;
-$visitedNode: blue;
+$visitedNode: cyan;
 $startNode: yellow;
 $endNode: red;
+$path: darkblue;
 
 .grid {
   position: absolute;
@@ -10,9 +11,9 @@ $endNode: red;
 
 .visitedNode {
   animation-name: animation-VisitedNode;
-  // animation-duration: 2s;
+  animation-duration: 2s;
   background-color: $visitedNode;
-  color: white;
+  // color: white;
 }
 
 .startNode {
@@ -21,6 +22,22 @@ $endNode: red;
 
 .endNode {
   background-color: $endNode;
+}
+
+.path {
+  background-color: $path;
+  animation-name: animation-Path;
+  animation-duration: 2s;
+  // animation-delay: 10s;
+}
+
+@keyframes animation-Path {
+  from {
+    background-color: $visitedNode;
+  }
+  to {
+    background-color: $path;
+  }
 }
 
 @keyframes animation-VisitedNode {
